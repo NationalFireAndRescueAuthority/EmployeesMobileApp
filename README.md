@@ -29,7 +29,7 @@ Restart your terminal and verify: adb --version
 Using expo:
 
 1. Port 8081 which is the base port for expo is not available
-
-2. Use npx expo start --android --port 1234  (Barcode + link)
-3. To install apk for testing download eas cli and use the command: eas build --platform ios\android --profile preview
+2. Barcode with Expo app: npx expo start --port 1234
+3. Using USB device connected: npx expo start --android --port 1234 
+4. To install apk for testing download eas cli and use the command: eas build --platform ios\android --profile preview
 
