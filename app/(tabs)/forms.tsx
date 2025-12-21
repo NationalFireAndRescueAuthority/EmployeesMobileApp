@@ -1,209 +1,55 @@
-import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
-import { LinearGradient } from 'expo-linear-gradient';
+import { Ionicons } from '@expo/vector-icons';
 import React, { useState } from 'react';
-import { ColorValue, Modal, ScrollView, StyleSheet, Text, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
+import { Modal, ScrollView, StyleSheet, Text, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { WebView } from 'react-native-webview';
+import { formsPageSections } from '../data/forms-page-sections';
+import { CardData } from '../models/CardData';
+import { CardButton } from '../shared/CardButton';
 
-// Function to generate a simple GUID
-function uuidv4() {
-  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-    var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
-    return v.toString(16);
-  });
-}
 
-type CardData = {
-  id: string;
-  title: string;
-  subtitle: string;
-  icon: React.ComponentProps<typeof MaterialCommunityIcons>['name'];
-  colors: readonly [ColorValue, ColorValue, ...ColorValue[]];
-  borderColor: string;
-  subCards?: CardData[];
-  action?: () => void;
-  url?: string;
-};
 
-const CardButton = ({ title, subtitle, icon, colors, borderColor, onPress, isFullWidth }: { 
-  title: string; 
-  subtitle: string; 
-  icon: React.ComponentProps<typeof MaterialCommunityIcons>['name']; 
-  colors: readonly [ColorValue, ColorValue, ...ColorValue[]]; 
-  borderColor: string;
-  onPress: () => void; 
-  isFullWidth: boolean;
-}) => (
-  <TouchableOpacity onPress={onPress} style={isFullWidth ? styles.cardTouchableFullWidth : styles.cardTouchable}>
-    <View style={[styles.card, { borderColor }]}>
-      <LinearGradient
-        colors={colors}
-        style={styles.gradient}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 0 }}
-      >
-        <MaterialCommunityIcons name={icon} size={24} color="white" style={styles.icon} />
-        <View style={styles.textContainer}>
-          <Text style={styles.cardTitle}>{title}</Text>
-          {subtitle ? <Text style={styles.cardSubtitle}>{subtitle}</Text> : null}
-        </View>
-      </LinearGradient>
-    </View>
-  </TouchableOpacity>
-);
+//   id: string;
+//   title: string;
+//   subtitle: string;
+//   icon: React.ComponentProps<typeof MaterialCommunityIcons>['name'];
+//   colors: readonly [ColorValue, ColorValue, ...ColorValue[]];
+//   borderColor: string;
+//   subCards?: CardData[];
+//   action?: () => void;
+//   url?: string;
+// };
+
+// const CardButton = ({ title, subtitle, icon, colors, borderColor, onPress, isFullWidth }: { 
+//   title: string; 
+//   subtitle: string; 
+//   icon: React.ComponentProps<typeof MaterialCommunityIcons>['name']; 
+//   colors: readonly [ColorValue, ColorValue, ...ColorValue[]]; 
+//   borderColor: string;
+//   onPress: () => void; 
+//   isFullWidth: boolean;
+// }) => (
+//   <TouchableOpacity onPress={onPress} style={isFullWidth ? styles.cardTouchableFullWidth : styles.cardTouchable}>
+//     <View style={[styles.card, { borderColor }]}>
+//       <LinearGradient
+//         colors={colors}
+//         style={styles.gradient}
+//         start={{ x: 0, y: 0 }}
+//         end={{ x: 1, y: 0 }}
+//       >
+//         <MaterialCommunityIcons name={icon} size={24} color="white" style={styles.icon} />
+//         <View style={styles.textContainer}>
+//           <Text style={styles.cardTitle}>{title}</Text>
+//           {subtitle ? <Text style={styles.cardSubtitle}>{subtitle}</Text> : null}
+//         </View>
+//       </LinearGradient>
+//     </View>
+//   </TouchableOpacity>
+// );
 
 const LONG_TITLE_THRESHOLD = 21;
 
-const sections: { title: string, cards: CardData[] }[] = [
-  {
-    title: "טפסים",
-    cards: [
-      {
-        id: uuidv4(),
-        title: "ביטחון",
-        subtitle: "",
-        icon: "shield-lock",
-        colors: ['#0F2027', '#203A43', '#2C5364'],
-        borderColor: "#F2994A",
-        subCards: [
-          { id: uuidv4(), title: "דיווח על אירוע חריג בתחום הביטחון", subtitle: "", icon: "alert-octagon-outline", colors: ['#0F2027', '#203A43', '#2C5364'], borderColor: "#F2994A", url: "https://www.google.com" },
-          { id: uuidv4(), title: "טופס בקשה ליציאה פרטית לחול", subtitle: "", icon: "airplane", colors: ['#0F2027', '#203A43', '#2C5364'], borderColor: "#F2994A", action: () => console.log("טופס בקשה ליציאה פרטית לחול pressed") },
-          { id: uuidv4(), title: "בדיקת רפ - צופי אש", subtitle: "", icon: "file-document-outline", colors: ['#0F2027', '#203A43', '#2C5364'], borderColor: "#F2994A", action: () => console.log("בדיקת רפ - צופי אש pressed") },
-          { id: uuidv4(), title: "טפסים לסיווג ביטחוני", subtitle: "", icon: "lock-question", colors: ['#0F2027', '#203A43', '#2C5364'], borderColor: "#F2994A", action: () => console.log("טפסים לסיווג ביטחוני pressed") },
-        ]
-      },
-      {
-        id: uuidv4(),
-        title: "הדרכה",
-        subtitle: "",
-        icon: "school",
-        colors: ['#0F2027', '#203A43', '#2C5364'],
-        borderColor: "#F2994A",
-        subCards: [
-          { id: uuidv4(), title: "הגשת מועמדות להדרכה בקורסים של בית הספר לכבאות", subtitle: "", icon: "file-document-outline", colors: ['#0F2027', '#203A43', '#2C5364'], borderColor: "#F2994A", action: () => console.log("הגשת מועמדות להדרכה בקורסים של בית הספר לכבאות pressed") },
-        ]
-      },
-      {
-        id: uuidv4(),
-        title: "הכנסות",
-        subtitle: "",
-        icon: "cash-multiple",
-        colors: ['#0F2027', '#203A43', '#2C5364'],
-        borderColor: "#F2994A",
-        subCards: [
-          { id: uuidv4(), title: "טופס פנייה לתלונה על ספק 25.5.21", subtitle: "", icon: "file-document-outline", colors: ['#0F2027', '#203A43', '#2C5364'], borderColor: "#F2994A", action: () => console.log("טופס פנייה לתלונה על ספק 25.5.21 pressed") },
-          { id: uuidv4(), title: "טופס תלונה על ספק", subtitle: "", icon: "file-document-outline", colors: ['#0F2027', '#203A43', '#2C5364'], borderColor: "#F2994A", action: () => console.log("טופס תלונה על ספק pressed") },
-        ]
-      },
-      {
-        id: uuidv4(),
-        title: "ועדת מכרזים",
-        subtitle: "",
-        icon: "gavel",
-        colors: ['#0F2027', '#203A43', '#2C5364'],
-        borderColor: "#F2994A",
-        subCards: [
-          { id: uuidv4(), title: "ט.7.8.2.1 טופס חוות דעת מקצועית במסגרת כוונה להתקשר עם ספק יחיד או חוץ מעודכן", subtitle: "", icon: "file-document-outline", colors: ['#0F2027', '#203A43', '#2C5364'], borderColor: "#F2994A", action: () => console.log("ט.7.8.2.1 טופס חוות דעת מקצועית במסגרת כוונה להתקשר עם ספק יחיד או חוץ מעודכן pressed") },
-        ]
-      },
-      {
-        id: uuidv4(),
-        title: "חקירות",
-        subtitle: "",
-        icon: "fire-truck",
-        colors: ['#0F2027', '#203A43', '#2C5364'],
-        borderColor: "#F2994A",
-        subCards: [
-          { id: uuidv4(), title: "טופס תפיסת מוצג ארצי", subtitle: "", icon: "file-document-outline", colors: ['#0F2027', '#203A43', '#2C5364'], borderColor: "#F2994A", action: () => console.log("טופס תפיסת מוצג ארצי pressed") },
-          { id: uuidv4(), title: "אישור על חקירת דליקה", subtitle: "", icon: "file-document-outline", colors: ['#0F2027', '#203A43', '#2C5364'], borderColor: "#F2994A", action: () => console.log("אישור על חקירת דליקה pressed") },
-          { id: uuidv4(), title: "טיוטא לחוות דעת טופס בסיסי ומתקדם", subtitle: "", icon: "file-document-outline", colors: ['#0F2027', '#203A43', '#2C5364'], borderColor: "#F2994A", action: () => console.log("טיוטא לחוות דעת טופס בסיסי ומתקדם pressed") },
-          { id: uuidv4(), title: "עליון עדות ארצי", subtitle: "", icon: "file-document-outline", colors: ['#0F2027', '#203A43', '#2C5364'], borderColor: "#F2994A", action: () => console.log("עליון עדות ארצי pressed") },
-          { id: uuidv4(), title: "טופס שראטוט תרשים ארצי", subtitle: "", icon: "file-document-outline", colors: ['#0F2027', '#203A43', '#2C5364'], borderColor: "#F2994A", action: () => console.log("טופס שראטוט תרשים ארצי pressed") },
-          { id: uuidv4(), title: "מדבקות", subtitle: "", icon: "file-document-outline", colors: ['#0F2027', '#203A43', '#2C5364'], borderColor: "#F2994A", action: () => console.log("מדבקות pressed") },
-          { id: uuidv4(), title: "תעודת עובד ציבור אחיד", subtitle: "", icon: "file-document-outline", colors: ['#0F2027', '#203A43', '#2C5364'], borderColor: "#F2994A", action: () => console.log("תעודת עובד ציבור אחיד pressed") },
-        ]
-      },
-      {
-        id: uuidv4(),
-        title: "לוגיסטיקה",
-        subtitle: "",
-        icon: "truck-delivery",
-        colors: ['#0F2027', '#203A43', '#2C5364'],
-        borderColor: "#F2994A",
-        subCards: [
-          { id: uuidv4(), title: "טופס הצעות מחיר - סופי", subtitle: "", icon: "file-document-outline", colors: ['#0F2027', '#203A43', '#2C5364'], borderColor: "#F2994A", action: () => console.log("טופס הצעות מחיר - סופי pressed") },
-        ]
-      },
-      {
-        id: uuidv4(),
-        title: "משאבי אנוש",
-        subtitle: "",
-        icon: "account-group",
-        colors: ['#0F2027', '#203A43', '#2C5364'],
-        borderColor: "#F2994A",
-        subCards: [
-          {
-            id: uuidv4(),
-            title: "כללי",
-            subtitle: "",
-            icon: "file-document-outline",
-            colors: ['#0F2027', '#203A43', '#2C5364'],
-            borderColor: "#F2994A",
-            subCards: [
-              { id: uuidv4(), title: "טופס 101", subtitle: "", icon: "file-document-outline", colors: ['#0F2027', '#203A43', '#2C5364'], borderColor: "#F2994A", action: () => console.log("טופס 101 pressed") },
-            ]
-          },
-          {
-            id: uuidv4(),
-            title: "גבייה",
-            subtitle: "",
-            icon: "cash-multiple",
-            colors: ['#0F2027', '#203A43', '#2C5364'],
-            borderColor: "#F2994A",
-            subCards: [
-              { id: uuidv4(), title: "תמחור להקצאת כבאים בתשלום - נספח ב'", subtitle: "", icon: "file-document-outline", colors: ['#0F2027', '#203A43', '#2C5364'], borderColor: "#F2994A", action: () => console.log("תמחור להקצאת כבאים בתשלום - נספח ב' pressed") },
-              { id: uuidv4(), title: "טופס הקצאת כבאים בתשלום - נספח א'", subtitle: "", icon: "file-document-outline", colors: ['#0F2027', '#203A43', '#2C5364'], borderColor: "#F2994A", action: () => console.log("טופס הקצאת כבאים בתשלום - נספח א' pressed") },
-              { id: uuidv4(), title: "פרוטוקול ועדת הנחות", subtitle: "", icon: "file-document-outline", colors: ['#0F2027', '#203A43', '#2C5364'], borderColor: "#F2994A", action: () => console.log("פרוטוקול ועדת הנחות pressed") },
-              { id: uuidv4(), title: "טבלה לריכוז חובות אבודים", subtitle: "", icon: "file-document-outline", colors: ['#0F2027', '#203A43', '#2C5364'], borderColor: "#F2994A", action: () => console.log("טבלה לריכוז חובות אבודים pressed") },
-              { id: uuidv4(), title: "טופס פניה לועדת מחיקות", subtitle: "", icon: "file-document-outline", colors: ['#0F2027', '#203A43', '#2C5364'], borderColor: "#F2994A", action: () => console.log("טופס פניה לועדת מחיקות pressed") },
-              { id: uuidv4(), title: "טופס הודעה למבקש שבקשתו לקבלת הנחה פטור התקבלה", subtitle: "", icon: "file-document-outline", colors: ['#0F2027', '#203A43', '#2C5364'], borderColor: "#F2994A", action: () => console.log("טופס הודעה למבקש שבקשתו לקבלת הנחה פטור התקבלה pressed") },
-              { id: uuidv4(), title: "טופס בקשה לחייב לקבלת הנחה או פטור", subtitle: "", icon: "file-document-outline", colors: ['#0F2027', '#203A43', '#2C5364'], borderColor: "#F2994A", action: () => console.log("טופס בקשה לחייב לקבלת הנחה או פטור pressed") },
-              { id: uuidv4(), title: "החלטה על הארכת מועד מתן החלטת וועדת הנחות", subtitle: "", icon: "file-document-outline", colors: ['#0F2027', '#203A43', '#2C5364'], borderColor: "#F2994A", action: () => console.log("החלטה על הארכת מועד מתן החלטת וועדת הנחות pressed") },
-              { id: uuidv4(), title: "בקשה להשלמת מסמכים", subtitle: "", icon: "file-document-outline", colors: ['#0F2027', '#203A43', '#2C5364'], borderColor: "#F2994A", action: () => console.log("בקשה להשלמת מסמכים pressed") },
-              { id: uuidv4(), title: "החלטת וועדת הנחות - אישור הבקשה", subtitle: "", icon: "file-document-outline", colors: ['#0F2027', '#203A43', '#2C5364'], borderColor: "#F2994A", action: () => console.log("החלטת וועדת הנחות - אישור הבקשה pressed") },
-              { id: uuidv4(), title: "דחיית הבקשה על ידי הוועדה", subtitle: "", icon: "file-document-outline", colors: ['#0F2027', '#203A43', '#2C5364'], borderColor: "#F2994A", action: () => console.log("דחיית הבקשה על ידי הוועדה pressed") },
-              { id: uuidv4(), title: "החלטת הוועדה בנוגע להארכת מועד הגשת בקשה להנחה או פטור", subtitle: "", icon: "file-document-outline", colors: ['#0F2027', '#203A43', '#2C5364'], borderColor: "#F2994A", action: () => console.log("החלטת הוועדה בנוגע להארכת מועד הגשת בקשה להנחה או פטור pressed") },
-              { id: uuidv4(), title: "טופס להצגה בוועדת הנחות", subtitle: "", icon: "file-document-outline", colors: ['#0F2027', '#203A43', '#2C5364'], borderColor: "#F2994A", action: () => console.log("טופס להצגה בוועדת הנחות pressed") },
-            ]
-          },
-          { id: uuidv4(), title: "לימודים אקדמיים", subtitle: "", icon: "school", colors: ['#0F2027', '#203A43', '#2C5364'], borderColor: "#F2994A", action: () => console.log("לימודים אקדמיים pressed") },
-          { id: uuidv4(), title: "משאבי אנוש", subtitle: "", icon: "account-group", colors: ['#0F2027', '#203A43', '#2C5364'], borderColor: "#F2994A", action: () => console.log("משאבי אנוש pressed") },
-          { id: uuidv4(), title: "פרישה וגמלאות", subtitle: "", icon: "human-greeting", colors: ['#0F2027', '#203A43', '#2C5364'], borderColor: "#F2994A", action: () => console.log("פרישה וגמלאות pressed") },
-          { id: uuidv4(), title: "רווחה ופרט", subtitle: "", icon: "heart-outline", colors: ['#0F2027', '#203A43', '#2C5364'], borderColor: "#F2994A", action: () => console.log("רווחה ופרט pressed") },
-          { id: uuidv4(), title: "רכש ולוגיסטיקה", subtitle: "", icon: "truck-delivery", colors: ['#0F2027', '#203A43', '#2C5364'], borderColor: "#F2994A", action: () => console.log("רכש ולוגיסטיקה pressed") },
-        ]
-      },
-      {
-        id: uuidv4(),
-        title: "רפואה",
-        subtitle: "",
-        icon: "medical-bag",
-        colors: ['#0F2027', '#203A43', '#2C5364'],
-        borderColor: "#F2994A",
-        action: () => console.log("Navigating to 'רפואה'")
-      },
-      {
-        id: uuidv4(),
-        title: "תקשוב",
-        subtitle: "",
-        icon: "desktop-classic",
-        colors: ['#0F2027', '#203A43', '#2C5364'],
-        borderColor: "#F2994A",
-        action: () => console.log("Navigating to 'תקשוב'")
-      }
-    ]
-  }
-];
+
 
 export default function Forms() {
   const [modalVisible, setModalVisible] = useState(false);
@@ -275,7 +121,7 @@ export default function Forms() {
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <ScrollView style={styles.container}>
-        {sections.map((section, index) => (
+        {formsPageSections.map((section, index) => (
           <View style={styles.section} key={index}>
             <Text style={styles.sectionTitle}>{section.title}</Text>
             {renderCardGrid(section.cards)}
