@@ -1,62 +1,35 @@
 IMPORTANT:
 
+You must have android studio installed and run the app for the first time to install SDK 
+https://developer.android.com/studio
+**
+Set the ANDROID_HOME environment variable on Windows:**
+
+Open System Properties (press Win + X → System → Advanced system settings)
+Click "Environment Variables"
+Click "New" under System variables
+Variable name: ANDROID_HOME
+Variable value: C:\Users\{YourUsername}\AppData\Local\Android\Sdk (or wherever you installed Android SDK)
+Click OK
+
+If you don't see the Android in Local folder - you didnt run the android studio for the first time :) 
+
+Add Android SDK tools to PATH:
+
+In the same Environment Variables window, find the Path variable under System variables
+Click "Edit"
+Click "New"
+Add: %ANDROID_HOME%\platform-tools
+Click "New" again
+Add: %ANDROID_HOME%\tools
+Click OK
+
+Restart your terminal and verify: adb --version
+
+Using expo:
+
 1. Port 8081 which is the base port for expo is not available
+2. Barcode with Expo app: npx expo start --port 1234 (You must be in the network)
+3. Using USB device connected: npx expo start --android --port 1234 (USB must be connected to the Dev server that you use - connecing usb to the hub won't work)
+4. To install apk for testing download eas cli and use the command: eas build --platform ios\android --profile preview
 
-2. Use npx expo start --android --port 1234 --tunnel (Barcode + link)
-3. To install apk for testing download eas cli and use the command: eas build --platform ios\android --profile preview
-
-
-
-> Edited for use in IDX on 07/09/12
-
-# Welcome to your Expo app 👋
-
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
-
-## Get started
-
-#### Android
-
-Android previews are defined as a `workspace.onStart` hook and started as a vscode task when the workspace is opened/started.
-
-Note, if you can't find the task, either:
-- Rebuild the environment (using command palette: `IDX: Rebuild Environment`), or
-- Run `npm run android -- --tunnel` command manually run android and see the output in your terminal. The device should pick up this new command and switch to start displaying the output from it.
-
-In the output of this command/task, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You'll also find options to open the app's developer menu, reload the app, and more.
-
-#### Web
-
-Web previews will be started and managred automatically. Use the toolbar to manually refresh.
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
-```
-
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
